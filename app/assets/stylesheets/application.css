@@ -13,7 +13,7 @@
  *= require_tree .
  *= require_self
  */
- .users-container {
+.users-container {
   margin-top: 10rem;
 }
 

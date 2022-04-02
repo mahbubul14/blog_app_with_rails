@@ -1,5 +1,3 @@
-
-
 <div>
     <%= render partial: "shared/user_profile", locals: {user: @user} %>
     <div class ="bio border border-3 container">
@@ -28,7 +26,7 @@
         <%=link_to "See all posts", user_posts_path(@user.id), class:"btn btn-primary justify-content-center align-self-center"%>
     </button>
 </div>
-  
+
 <div>
     <%= render partial: "shared/user_profile", locals: {user: @user} %>
     <div class ="bio border border-3 container">
