@@ -5,7 +5,7 @@ class UsersController < ApplicationController
     user_signed_in?
     current_user
     user_session
-    @user = User.all
+    @users = User.all
     @posts = Post.all
   end
 
