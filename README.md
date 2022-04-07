@@ -55,6 +55,7 @@ Install all Ruby dependecies with:
 - Twitter: [@twitter](https://twitter.com/claudemucyo)
 - LinkedIn: [MUCYOclaude](https://www.linkedin.com/in/mucyoclaude)
 
+
 ## 🤝 Contributing
 
 Contributions, issues, and feature requests are welcome!
