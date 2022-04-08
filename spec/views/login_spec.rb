@@ -1,5 +1,4 @@
 require 'rails_helper'
-
 RSpec.describe 'Login page', js: true, type: :feature do
   describe 'Login Page requirements' do
     it 'has username and password inputs, and Log in button' do
