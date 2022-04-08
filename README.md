@@ -53,7 +53,8 @@ Install all Ruby dependecies with:
 👤 **Claude Mucyo**
 - GitHub: [@Mucyoclaude](https://github.com/Mucyoclaude)
 - Twitter: [@twitter](https://twitter.com/claudemucyo)
-- LinkedIn: [LinkedIn](https://www.linkedin.com/in/mucyoclaude)
+- LinkedIn: [MUCYOclaude](https://www.linkedin.com/in/mucyoclaude)
+
 
 ## 🤝 Contributing
 
