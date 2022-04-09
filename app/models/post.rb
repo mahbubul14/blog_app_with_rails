@@ -1,21 +1,22 @@
 class Post < ApplicationRecord
-  validates :title, presence: true, length: { maximum: 250 }
-  validates :comments_counter, numericality: { only_integer: true, greated_than_or_equal_to: 0 }
-  validates :likes_counter, numericality: { only_integer: true, greated_than_or_equal_to: 0 }
+  validates :title, presence: true,
+                    length: { maximum: 250, too_long: 'must not exceed 250 characters' }
+  validates :comments_counter, :likes_counter, numericality: { greater_than_or_equal_to: 0 }
 
-  has_many :likes
-  has_many :comments
+  belongs_to :user, counter_cache: :posts_counter
+  has_many :comments, dependent: :destroy
+  has_many :likes, counter_cache: :likes_counter
+  has_many :users, through: :likes, counter_cache: :likes_counter
 
-  belongs_to :author, class_name: 'User'
-  after_save :post_counter
-
-  def recent_comments
-    comments.limit(5).order(created_at: :desc)
+  def recent_comments(limit = 5)
+    comments.last limit
   end
 
-  private
+  def liked?(id)
+    users.exists? id
+  end
 
-  def post_counter
-    author.increment!(:posts_counter)
+  def update_counter(value)
+    user.update posts_counter: value
   end
 end

@@ -1,41 +1,22 @@
-<div class="post p-2 border border-3 container-post">
-        <nav class="nav-container-3">
-     <button>
-     <%= link_to "Home", root_path, class: "btn btn-primary justify-content-center align-self-center" %>
-     </button>
-    <button>
-    <%= link_to "Back", :back, class: "btn btn-primary justify-content-center align-self-center" %>
-    </button>
-    </nav>
-
-            <div>
-                 <div class="post-info">
-                    <div><h4 class="py-3"> <%= @post.title %> by <%=@user.name %> </h4> </div>
-                    <div class="info-container">
-                      <div class="like-btn"><%= render "likes/create" %></div>
-                        <div>Comments: <%= @post.comments.size%> </div>
-                        <div>Likes: <%= @post.likes.size%> </div>
-                        
-                    </div >
-                </div>
-                 <p> <%= @post.text %> </p>
-                   
-            </div>
-            <br/>
-         
-                <div class="my-5 p-2 border border-3 container">
-                    <ul class="comments">
-                        <% @post.comments.each do |comment| %>
-                           <% unless !comment.persisted? %>
-                                <li><%= comment.author.name %> : <%= comment.text %> </li>
-                            <% end %>
-                        <% end %>
-                    </ul>
-                </div>
-
-         
-        
-         <%= render "comments/create" %>
-          
-            
+<%= render "header", post: @post %>
+<div class="is-flex is-flex-direction-row is-justify-content-space-between is-flex-wrap-wrap my-3">
+  <div class="media is-flex is-align-items-center">
+    <div class="media-left">
+      <div class="image is-32x32">
+        <%= image_tag(get_photo(@user), alt: "avatar", class: "is-rounded") %>
+      </div>
+    </div>
+    <div class="media-content">
+      <div class="content">
+        <strong><%= @user.name %></strong>
+        <p class="is-size-7 is-italic"><%= t('posted_on', date: @post.created_at.to_s(:nice_date)) %></p>
+      </div>
+    </div>
+  </div>
 </div>
+<div class="content">
+  <h1><%= @post.title %></h1>
+  <p><%= @post.text %></p>
+</div>
+<%= render partial: "new_comment", post: @post %>
+<%= render partial: "comment", collection: @comments %>
