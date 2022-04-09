@@ -1,28 +1,59 @@
 class PostsController < ApplicationController
-  def show
-    @user = User.find_by_id(params[:user_id])
-    @post = @user.posts.includes(:likes, :comments).find(params[:id])
-  end
+  load_and_authorize_resource
 
   def index
-    @user = User.includes(:posts).find(params[:user_id])
-    @comments = @user.posts.includes(:comments)
+    @user = User.find params[:user_id]
+    @posts = @user.posts.order(created_at: :desc)
+  end
+
+  def show
+    @user = User.find params[:user_id]
+    @post = @user.posts.includes(:comments).find(params[:id])
+    @comments = @post.comments.all.order('created_at')
+    @liked = @post.liked? current_user.id
   end
 
   def new
-    @current = current_user
+    @post = Post.new
+  end
+
+  def edit
+    @post = Post.find params[:id]
+  end
+
+  def update
+    @post = Post.find params[:id]
+
+    respond_to do |format|
+      if @post.update post_params
+        format.html { redirect_to user_post_path(@post.user.id, @post.id), notice: 'Published successfully!' }
+      else
+        format.html { render :new }
+      end
+    end
   end
 
   def create
-    created_post = current_user.posts.build(post_params)
+    @post = current_user.posts.new post_params
 
     respond_to do |format|
-      format.html do
-        if created_post.save
-          redirect_to user_post_path(created_post.author_id, created_post.id), notice: 'Post created !'
-        else
-          render :new, alert: 'Post not created, please try again!'
-        end
+      if @post.save
+        format.html { redirect_to user_post_path(@post.user.id, @post.id), notice: 'Published successfully!' }
+      else
+        format.html { render :new }
+      end
+    end
+  end
+
+  def destroy
+    post = Post.find params[:id]
+    user = post.user
+
+    respond_to do |format|
+      if post.destroy
+        format.html { redirect_to user_path(user.id), notice: 'Post deleted!' }
+      else
+        format.html { redirect_to user_path(user.id), alert: 'Failed to delete post!' }
       end
     end
   end

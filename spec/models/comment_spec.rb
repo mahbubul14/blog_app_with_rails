@@ -1,26 +1,12 @@
 require 'rails_helper'
 
 RSpec.describe Comment, type: :model do
-  describe 'comment model methods' do
-    user1 = User.new
-    post1 = Post.new(title: 'post_test', text: 'this is post test', author: user1, likes_counter: 8)
-    subject do
-      Comment.new
-    end
+  describe '#update_counter' do
+    subject { FactoryBot.build :comment }
 
-    before { subject.save }
-
-    it 'title presence' do
-      subject.text = nil
-      expect(subject).to_not be_valid
-    end
-
-    describe 'comments model method' do
-      it 'should update comments count' do
-        post1.comments_counter = 2
-        subject.post = post1
-        expect(subject.comments_counter.comments_counter).to eq 3
-      end
+    it 'should update the post comments counter' do
+      subject.update_counter(2)
+      expect(subject.post.comments_counter).to be(2)
     end
   end
 end

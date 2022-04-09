@@ -1,49 +1,49 @@
 require 'rails_helper'
 
 RSpec.describe Post, type: :model do
-  describe 'post model validations' do
-    subject do
-      Post.new
-    end
+  describe 'validates' do
+    subject { FactoryBot.build :post }
 
-    before { subject.save }
-
-    it 'title presence' do
+    it 'should have a title' do
       subject.title = nil
       expect(subject).to_not be_valid
     end
 
-    it 'title should not exceed 250 char' do
-      subject.title = 'post 1' * 251
+    it 'should have title with at most 250 characters' do
+      subject.title = 'RoR' * 250
       expect(subject).to_not be_valid
     end
 
-    it 'comments counter should be integer ' do
-      subject.comments_counter = 1.7
+    it 'should not have a blank title' do
+      subject.title = ' '
       expect(subject).to_not be_valid
     end
 
-    it 'comments counter should be greater or equal to 0 ' do
+    it 'should have a postive integer comments counter' do
       subject.comments_counter = -1
       expect(subject).to_not be_valid
     end
 
-    it 'Likes counter should be integer ' do
-      subject.likes_counter = 1.7
-      expect(subject).to_not be_valid
-    end
-
-    it 'Likes counter should be greater or equal to 0 ' do
+    it 'should have a postive integer likes counter' do
       subject.likes_counter = -1
       expect(subject).to_not be_valid
     end
+  end
 
-    describe 'post model method' do
-      before { 10.times { |_comment| Comment.create(post_id: subject.id) } }
+  describe '#recent_comments' do
+    subject { FactoryBot.create :post_with_comments, comments_counter: 5 }
 
-      it 'rencent comments should be 3' do
-        expect(subject.recent_comments).to eq(subject.comments.last(3))
-      end
+    it 'should return 5 posts' do
+      expect(subject.recent_comments.length).to be(5)
+    end
+  end
+
+  describe '#update_counter' do
+    subject { FactoryBot.build :post }
+
+    it 'should update the user posts counter' do
+      subject.update_counter(2)
+      expect(subject.user.posts_counter).to be(2)
     end
   end
 end

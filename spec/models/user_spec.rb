@@ -1,39 +1,30 @@
 require 'rails_helper'
 
 RSpec.describe User, type: :model do
-  describe 'User model validations' do
-    subject do
-      User.new
-    end
+  describe 'validates' do
+    subject { FactoryBot.build :user }
 
-    before { subject.save }
-
-    it 'name presence' do
+    it 'should have a name' do
       subject.name = nil
       expect(subject).to_not be_valid
     end
 
-    it 'bio presence' do
-      subject.bio = nil
+    it 'should have an alpha name' do
+      subject.name = ' '
       expect(subject).to_not be_valid
     end
 
-    it 'posts counter should be integer ' do
-      subject.posts_counter = 1.7
-      expect(subject).to_not be_valid
-    end
-
-    it 'posts counter should be greater or equal to 0 ' do
+    it 'should have a postive integer posts counter' do
       subject.posts_counter = -1
       expect(subject).to_not be_valid
     end
+  end
 
-    describe 'User model method' do
-      before { 10.times { |_post| Post.create(author: subject) } }
+  describe '#recent_posts' do
+    subject { FactoryBot.create :user_with_posts, posts_counter: 3 }
 
-      it 'rencent posts should be 3' do
-        expect(subject.recent_posts).to eq(subject.posts.last(3))
-      end
+    it 'should return 3 posts' do
+      expect(subject.recent_posts.length).to be(3)
     end
   end
 end
